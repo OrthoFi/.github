@@ -1,0 +1,119 @@
+name: CI
+on:
+  push:
+    branches: 
+  workflow_dispatch:
+    inputs:
+      environmentName: 
+        description: 'Environment Name'
+        required: true
+jobs:
+  init:
+    name: Init
+    runs-on: ubuntu-latest
+    outputs:
+      targetEnvironment: ${{ steps.environment.outputs.targetEnvironment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Configure Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - name: Set Target Environment
+        id: environment
+        shell: python
+        env:
+          targetEnvironment: ${{ github.event.inputs.environmentName }}
+          ref: ${{ github.ref }}
+        run: |
+            import os
+
+            ref = os.environ['ref']
+            environment = os.environ['targetEnvironment']
+
+            refs = {
+                'refs/heads/main': "production",
+                'refs/heads/risk': 'risk'
+            }
+
+            if not environment:
+                if ref in refs:
+                  environment = refs[ref]
+                    
+            if environment:
+              print(f'::set-output name=targetEnvironment::{environment}')
+
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+
+      - name: Restore Dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          npm i -g @angular/cli  
+          npm ci
+
+  deploy:
+    name: "Deploy"
+    needs: [ init ]
+    runs-on: ubuntu-latest
+    if: needs.init.outputs.targetEnvironment
+    environment: ${{ needs.init.outputs.targetEnvironment }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: Configure Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12'
+      - uses: actions/cache@v2
+        id: cache
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.BUILD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.BUILD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+          role-to-assume: ${{ secrets.BUILD_ROLE }}
+      - name: Get Parameters
+        run: |
+          pip install boto3
+          echo $(python get_parameters.py ${{ format('/configs/envs/{0}', needs.init.outputs.targetEnvironment) }}) >> $GITHUB_ENV
+      - name: Restore Dependencies
+        run: |
+          npm i -g @angular/cli  
+          npm install  
+      - name: Build
+        run: |
+          npm i -g @angular/cli
+          npm i
+          ng build --progress=false --source-map
+        env:
+          ENV_NAME: env.DESTINATION_ENVIRONMENT
+          PRODUCTION_MODE: true
+          API_GATEWAY_URL: env.API_GATEWAY_URL
+          KEYMASTER_URL: env.KEYMASTER_URL
+          GATEKEEPER_URL: env.GATEKEEPER_URL
+          PATIENT_URL: env.PATIENT_URL
+          PORTAL_URL: env.PORTAL_URL
+          ERROR_REDIRECT_URL: env.LOGIN_ERROR_REDIRECT_URL
+          ERROR_CONSOLE_LOG: true
+          ERROR_LOGGER_APP_ID: https://bb73a51fdce0431cb4f1869cfb402990@sentry.orthofi-dev.com/27
+      - uses: actions/upload-artifact@v2
+        with:
+          name: client
+          path: dist
