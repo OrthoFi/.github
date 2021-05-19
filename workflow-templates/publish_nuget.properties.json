@@ -1,0 +1,8 @@
+{
+    "name": "Publish NuGet",
+    "description": "Template for publishing shared NuGet packages",
+    "filePatterns": [
+        "^Directory.Build.props$",
+        "*.sln$"
+    ]
+}
