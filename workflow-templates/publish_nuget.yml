@@ -44,10 +44,10 @@ jobs:
           path: out_tests
 
       - name: Package
-        run: dotnet pack -o out --no-build -c Release --include-symbols
+        run: dotnet pack -o out --no-build -c Release
 
       - name: Upload
-        run: dotnet nuget push "out/" -s GitHub -k ${{ secrets.GITHUB_TOKEN }} --skip-duplicate
+        run: dotnet nuget push "out/*.nupkg" -s GitHub -k ${{ secrets.GITHUB_TOKEN }}
 
       - name: Push
         if: github.ref == 'refs/heads/main'
