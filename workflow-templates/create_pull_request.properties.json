@@ -1,0 +1,8 @@
+{
+    "name": "Created PRs into Main",
+    "description": "Template for auto creating pull requests from risk into main",
+    "filePatterns": [
+        "package.json",
+        "*.sln$"
+    ]
+}

@@ -1,0 +1,31 @@
+name: Trigger Automated Deploy
+on:
+  workflow_run:
+    workflows:
+      - Build
+    branches: [main, risk, dev]
+    types:
+      - completed
+
+jobs:
+  init:
+    runs-on: ubuntu-latest
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    env:
+      TARGET_BRANCH: ${{ github.event.workflow_run.head_branch }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Set Target Environment
+        id: environment
+        uses: orthofi/actions-set-target-environment@v1
+        with:
+          branch: ${{ env.TARGET_BRANCH }}
+
+      - name: Authenticate
+        run: echo "${{ secrets.BUILD_GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Trigger Deploy Workflow
+        run: gh workflow run deploy.yml -f "environment=${{ steps.environment.outputs.target-environment }}" --ref ${{ env.TARGET_BRANCH }}

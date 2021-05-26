@@ -1,0 +1,8 @@
+{
+    "name": "Trigger Automated Deploys",
+    "description": "Template for triggering automated deploys for known environments",
+    "filePatterns": [
+        "package.json",
+        "*.sln$"
+    ]
+}

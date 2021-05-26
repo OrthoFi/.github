@@ -1,0 +1,32 @@
+name: Create Pull Request
+on:
+  push:
+    branches: [risk]
+jobs:
+  pull-request:
+    name: Create Pull Request
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+
+      - name: Authenticate
+        shell: pwsh
+        run: echo "${{ secrets.BUILD_GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Check for Existing PR
+        shell: pwsh
+        id: check
+        run: |
+          echo "${{ secrets.BUILD_GITHUB_TOKEN }}" | gh auth login --with-token
+
+          $count = (ConvertFrom-Json($(gh pr list -S "base:main head:risk" --json number))).Count
+          if ($count -eq 0) {
+            Write-Host "::set-output name=create::true"
+          }
+
+      - name: Create PR
+        if: ${{ steps.check.outputs.create }}
+        shell: pwsh
+        run: gh pr create --title "Merge branch 'risk' into 'main'" --body "risk -> main" --base "main" --head "risk"
