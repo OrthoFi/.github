@@ -1,54 +1,18 @@
-name: Publish NuGet
+name: Build
 on:
   push:
-    branches: [main, develop]
-  workflow_dispatch:
+    branches: ["**"]
 jobs:
-  build-and-publush:
-    name: Build and Publish
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
         with:
           fetch-depth: 0
 
-      - name: Add NuGet Source
-        run: dotnet nuget add source https://nuget.pkg.github.com/OrthoFi/index.json -n GitHub -u OrthoFi -p ${{ secrets.BUILD_GITHUB_TOKEN }} --store-password-in-clear-text
-
-      - name: Configure GitHub User
-        run: |
-          git config user.name "github-actions"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
-      - name: Generate Version
-        run: |
-          npm i standard-version
-
-          if [ "${GITHUB_REF#refs/heads/}" == "main" ];
-          then
-            npx standard-version
-          else
-            npx standard-version -p "${GITHUB_REF#refs/heads/}+${GITHUB_RUN_NUMBER}"
-          fi
-
-      - name: Build
-        run: dotnet build --nologo -c Release
-
-      - name: Test
-        run: dotnet test --no-build -c Release --nologo -r out_tests --logger "trx" --collect "Code Coverage"
-
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+      - name: Build and Push
+        uses: orthofi/actions-build-and-push-nuget@v1
         with:
-          name: tests
-          path: out_tests
-
-      - name: Package
-        run: dotnet pack -o out --no-build -c Release
-
-      - name: Upload
-        run: dotnet nuget push "out/*.nupkg" -s GitHub -k ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Push
-        if: github.ref == 'refs/heads/main'
-        run: git push --follow-tags
+          github-token: ${{ secrets.BUILD_GITHUB_TOKEN }}
