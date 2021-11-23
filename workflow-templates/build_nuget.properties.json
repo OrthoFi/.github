@@ -1,0 +1,5 @@
+{
+  "name": "Build and Push Nuget",
+  "description": "Build and Push NuGet Packages",
+  "filePatterns": ["^Directory.Build.props$", "*.sln$"]
+}

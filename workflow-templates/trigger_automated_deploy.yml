@@ -18,14 +18,8 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set Target Environment
-        id: environment
-        uses: orthofi/actions-set-target-environment@v1
+      - name: Initiate Deploy Workflow
+        uses: orthofi/actions-initiate-automated-deploy@v1
         with:
           branch: ${{ env.TARGET_BRANCH }}
-
-      - name: Authenticate
-        run: echo "${{ secrets.BUILD_GITHUB_TOKEN }}" | gh auth login --with-token
-
-      - name: Trigger Deploy Workflow
-        run: gh workflow run deploy.yml -f "environment=${{ steps.environment.outputs.target-environment }}" --ref ${{ env.TARGET_BRANCH }}
+          token: ${{ secrets.BUILD_GITHUB_TOKEN }}

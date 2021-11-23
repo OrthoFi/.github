@@ -1,8 +1,0 @@
-{
-    "name": "Build dotnet Projects",
-    "description": "Template for modern dotnet projects",
-    "filePatterns": [
-        "^Directory.Build.props$",
-        "*.sln$"
-    ]
-}
