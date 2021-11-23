@@ -1,7 +1,5 @@
 {
-    "name": "OrthoFi Angular Workflow",
-    "description": "Angular CI workflow template",
-    "filePatterns": [
-        "^angular.json$"
-    ]
+  "name": "Build Angular Applications",
+  "description": "Build Angular Applications",
+  "filePatterns": ["^angular.json$"]
 }
