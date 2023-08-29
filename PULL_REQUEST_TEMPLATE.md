@@ -27,8 +27,9 @@
 - [ ] Manual testing completed.
 - [ ] Change can be monitored (Datadog, Kibana, Cloudwatch, etc.).
 - [ ] Has automated test coverage. (Any of the following - Unit, Postman, Selenium, Load, Cypress).
-- [ ] Communication to necessary parties. (Pendo, Slack, Ops, etc.)
-- [ ] Branch name follows SDLC guidelines (Linked below)
+- [ ] QA targets (data-qa) added to properly selected elements for test automation.
+- [ ] Communication to necessary parties. (Pendo, Slack, Ops, etc.).
+- [ ] Branch name follows SDLC guidelines (Linked below).
 
 ### _Special Snowflake Deployment_
 
