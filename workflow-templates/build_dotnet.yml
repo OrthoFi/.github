@@ -12,7 +12,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
@@ -26,7 +26,7 @@ jobs:
         run: dotnet test --no-build -c Release --nologo -r out_tests --collect:"XPlat Code Coverage"
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: tests
           path: out_tests
@@ -35,7 +35,7 @@ jobs:
         run: dotnet eb package -pl ./Api -o ./artifacts/beanstalk.zip
 
       - name: Upload Beanstalk Zip
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           name: beanstalk
           path: ./artifacts/beanstalk.zip

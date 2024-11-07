@@ -8,7 +8,7 @@ on:
         description: Environment
 
 env:
-  NODE_VERSION: 10
+  NODE_VERSION: 18
   MYGET_API_KEY: ${{ secrets.MYGET_API_KEY }}
 
 jobs:
