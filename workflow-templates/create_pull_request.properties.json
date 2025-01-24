@@ -1,5 +1,0 @@
-{
-  "name": "Automatically Create risk PRs into main",
-  "description": "Automatically create risk PRs into main",
-  "filePatterns": ["package.json", "*.sln$"]
-}

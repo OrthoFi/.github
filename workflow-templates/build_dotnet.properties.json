@@ -1,5 +1,0 @@
-{
-  "name": "Build .NET Applications",
-  "description": "Build .NET Applications",
-  "filePatterns": ["^Directory.Build.props$", "*.sln$"]
-}

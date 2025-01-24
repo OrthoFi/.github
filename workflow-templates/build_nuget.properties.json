@@ -1,5 +1,0 @@
-{
-  "name": "Build Nuget Packages",
-  "description": "Build NuGet Packages",
-  "filePatterns": ["^Directory.Build.props$", "*.sln$"]
-}

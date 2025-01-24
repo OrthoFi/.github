@@ -1,5 +1,0 @@
-{
-  "name": "Build Angular Applications",
-  "description": "Build Angular Applications",
-  "filePatterns": ["^angular.json$"]
-}
