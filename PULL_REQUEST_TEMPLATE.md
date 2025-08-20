@@ -1,59 +1,42 @@
-# Pre-Deploy
+# OrthoFi Change Form  
+*This form is only required when merging to the main branch and/or production environment*  
+*No sections are optional, they are required for PCI and SOC2 compliance*
+*For auto-generated 'risk -> main' PRs, you can use the three dots menu in the top right of this comment to "Edit" and fill out the form*
 
-## Potential Impact
+---
+### Description
+> Provide a description of the background, problem, and solution.
 
-- [ ] 1 - Major
-- [ ] 2 - Medium
-- [ ] 3 - Minor (_Template is Optional For These_)
 
-### _Description_
+### Potential Impact
+- *Major → Affects security controls, authentication/authorization, encryption, networking rules, production infrastructure, or anything that could affect systems in the Cardholder Data Environment (CDE).*  
+- *Medium → Affects production behavior or operations (e.g., performance, availability, user-facing features) but does not alter PCI-related security controls.*  
+- *Minor → Only cosmetic, documentation-only, or limited to non-sensitive configs with no security or operational risk.*  
 
-> A description of the background, problem, and/or suggested solution.
+> Select one
+- [ ] Major
+- [ ] Medium
+- [ ] Minor
 
-### _Test Instructions_
+### Compliance Checklist
+> Assert that the following requirements have been met by checking the boxes.
+- [ ] Change validated in a lower environment  
+- [ ] No hardcoded credentials or secrets  
+- [ ] No reduction in security controls  
+- [ ] Changes follow principle of least privilege  
+- [ ] Maintains network segmentation boundaries  
+- [ ] Logging preserved for security events  
+- [ ] Change implementor != change approver  
 
-> How do you test this?
+### Testing
+> 1. Provide a description of how this change was validated in a lower environment.  
+> 2. How will this be validated in production? *(optional if the same as lower environment)*  
 
-### _Dependencies_
 
-> Any other PRs we should know about?
+### Rollback Plan
+> How will this change be rolled back if needed?
 
-### _What could go wrong?_
 
-> Use this to raise any concerns that may not be apparent to all.
-
-## Checklist
-
-- [ ] Manual testing completed.
-- [ ] Change can be monitored (Datadog, Kibana, Cloudwatch, etc.).
-- [ ] Has automated test coverage. (Any of the following - Unit, Postman, Selenium, Load, Cypress).
-- [ ] QA targets (data-qa) added to properly select elements for test automation.
-- [ ] Communication to necessary parties. (Pendo, Slack, Ops, etc.).
-- [ ] Branch name follows SDLC guidelines (Linked below).
-
-### _Special Snowflake Deployment_
-
-- [ ] After Hours / Weekend Deploy
-- [ ] Deploy in isolation
-
-# Post-Deploy
-
-Someone on the team will be available for the following:
-
-- [ ] Test deployed changes in prod.
-- [ ] Monitor for any anomalies.
-- [ ] Support in case of incident.
-
-## Rollback Plan
-
-> Any special considerations for rollback?
-
-#### _SDLC Documentation_
-
-https://docs.google.com/document/d/1fKQnoXO2dM54qJ6XVKApt_QWJ30GcRGp46JTfIanE2I/edit
-
-## Merge Instructions
-
-- Use a `squash and merge` or `rebase and merge` when merging a feature branch into `risk`
-- Use a `merge commit` when merging `risk` into `main`
-- See [documentation](https://orthofi.atlassian.net/wiki/spaces/DEV/pages/2509078549/Software+Development+Lifecycle) for more details
+---
+*Implementation date and time will be recorded automatically via GitHub merge history*  
+*Approval will be recorded automatically via GitHub PR approval by a PCI-designated approver*
