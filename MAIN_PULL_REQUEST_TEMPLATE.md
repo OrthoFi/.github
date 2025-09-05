@@ -13,3 +13,5 @@
 *Approval is recorded automatically via GitHub PR approval when merging to the risk branch*
 *The risk branch is a protected branch that can only be modified via a pull request with at least one approval*
 *In non-standard repos without a risk branch, required PR approval will be added automatically for pull requests to main*
+
+<!-- Non-standard repos are currently client-monorepo and the terraform tf-* repos>
